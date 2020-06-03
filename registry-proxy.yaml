@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reg-local
+  labels:
+    app: reg-local
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reg-local
+  template:
+    metadata:
+      labels:
+        app: reg-local
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: blog-k3s03
+      tolerations:
+      - key: node-role.kubernetes.io/ingress
+        operator: Exists
+        effect: NoSchedule
+      hostNetwork: false
+      containers:
+      - name: reg-local
+        image: findsec/registry-proxy:latest
+        env:
+        - name: DELETE_ENABLED
+          value: "true"
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/localtime
+          name: localtime
+        - mountPath: /var/lib/registry
+          name: registry
+      volumes:
+      - name: localtime
+        hostPath:
+          path: /etc/localtime
+      - name: registry
+        hostPath:
+          path: /var/lib/registry
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcr
+  labels:
+    app: gcr
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: gcr
+  template:
+    metadata:
+      labels:
+        app: gcr
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: blog-k3s03
+      tolerations:
+      - key: node-role.kubernetes.io/ingress
+        operator: Exists
+        effect: NoSchedule
+      hostNetwork: false 
+      containers:
+      - name: gcr
+        image: findsec/registry-proxy:latest 
+        env:
+        - name: PROXY_REMOTE_URL
+          value: https://gcr.io
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/localtime
+          name: localtime
+        - mountPath: /var/lib/registry
+          name: registry
+      volumes:
+      - name: localtime
+        hostPath:
+          path: /etc/localtime
+      - name: registry
+        hostPath:
+          path: /var/lib/registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gcr
+  labels:
+    app: gcr
+spec:
+  sessionAffinity: ClientIP
+  selector:
+    app: gcr
+  ports:
+    - protocol: TCP
+      name: http
+      port: 5000 
+      targetPort: 5000 
