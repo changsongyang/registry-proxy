@@ -23,7 +23,7 @@ spec:
       hostNetwork: false
       containers:
       - name: reg-local
-        image: findsec/registry-proxy:latest
+        image: yangchuansheng/registry-proxy:latest 
         env:
         - name: DELETE_ENABLED
           value: "true"
@@ -66,9 +66,14 @@ spec:
         operator: Exists
         effect: NoSchedule
       hostNetwork: false 
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+          - 8.8.4.4
       containers:
       - name: gcr
-        image: findsec/registry-proxy:latest 
+        image: yangchuansheng/registry-proxy:latest 
         env:
         - name: PROXY_REMOTE_URL
           value: https://gcr.io
