@@ -122,4 +122,4 @@
 
 更多文章请关注我们的微信公众号：
 
-![微信公众号](https://hugo-picture.oss-cn-beijing.aliyuncs.com/2020-04-20-20200405205151.webp)
+![微信公众号](https://cdn.jsdelivr.net/gh/yangchuansheng/imghosting/img/20200603173256.png)
