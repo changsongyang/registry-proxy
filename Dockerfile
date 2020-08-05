@@ -1,4 +1,4 @@
-FROM registry:2.6
+FROM registry
 LABEL maintainer="istone <istone@live.com>"
 ENV PROXY_REMOTE_URL="" \
     DELETE_ENABLED=""
