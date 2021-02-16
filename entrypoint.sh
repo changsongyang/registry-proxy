@@ -16,6 +16,10 @@ elif [ $DELETE_ENABLED = true -a `grep -c "delete:" $CONFIG_YML` -eq 0 ]; then
     echo "------ Enabled local storage delete -----"
 fi
 
+sed -i "/headers/a\    Access-Control-Allow-Origin: ['*']" $CONFIG_YML
+sed -i "/headers/a\    Access-Control-Allow-Methods: ['HEAD', 'GET', 'OPTIONS', 'DELETE']" $CONFIG_YML
+sed -i "/headers/a\    Access-Control-Expose-Headers: ['Docker-Content-Digest']" $CONFIG_YML
+
 case "$1" in
     *.yaml|*.yml) set -- registry serve "$@" ;;
     serve|garbage-collect|help|-*) set -- registry "$@" ;;
