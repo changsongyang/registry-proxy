@@ -15,11 +15,13 @@ on:
     branches: [ master ]
     paths: 
       - 'Dockerfile'
+      - 'entrypoint.sh'
       - '.github/workflows/main.yml'
   pull_request:
     branches: [ master ]
     paths: 
       - 'Dockerfile'
+      - 'entrypoint.sh'
   #watch:
     #types: started
 
